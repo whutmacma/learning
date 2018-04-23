@@ -20,9 +20,12 @@ xadmin.autodiscover()
 from xadmin.plugins import xversion
 xversion.register_models()
 
-from django.urls import include, path
+from django.urls import include, path, re_path
+from django.views.generic import TemplateView
 
 urlpatterns = [
     path( r'xadmin/', xadmin.site.urls),
-    path( r'', include('apps.message.urls')),
+   # path( r'', include('apps.message.urls')),
+    re_path(r'^index/', TemplateView.as_view(template_name="index.html"), name="index"),
+    path(r'', include('apps.users.urls'))
 ]

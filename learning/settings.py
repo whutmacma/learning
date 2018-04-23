@@ -14,8 +14,10 @@ import os
 import sys
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-# set the path of the apps as the root path
+# set the path of the apps as the app_root path
 sys.path.insert(0,os.path.join(BASE_DIR,'apps'))
+# 
+sys.path.insert(0,os.path.join(BASE_DIR,'extra_apps'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
@@ -28,7 +30,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['localhost ','47.94.236.221']
 
-
+AUTHENTICATION_BACKENDS = (
+    'users.views.CustomBackend',
+)
 # Application definition
 
 INSTALLED_APPS = [
@@ -37,13 +41,15 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    #nginx静态文件处理能力更强
     'django.contrib.staticfiles',
     
     'xadmin',
     'crispy_forms',    
     'reversion',
+    'captcha',    
 
-    'message',
+    #'message',
     'users',
     'courses',
     'organization',
@@ -135,6 +141,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-	os.path.join(BASE_DIR,'static')
-]
+#STATICFILES_DIRS = [
+#	os.path.join(BASE_DIR,'static')
+#]
+#STATIC_ROOT = os.path.join(BASE_DIR,'static')
+EMAIL_HOST = "smtp.163.com"
+EMAIL_PORT = 25
+EMAIL_HOST_USER = "whutmachangcong@163.com"
+EMAIL_HOST_PASSWORD = "tdl2018"
+EMAIL_USE_TLS = False
+EMAIL_FROM = "whutmachangcong@163.com"
