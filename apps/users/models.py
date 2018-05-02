@@ -15,13 +15,12 @@ class UserProfile(AbstractUser):
 	address = models.CharField(max_length=100, default=u"")
 	mobile = models.CharField(max_length=11, null=True, blank=True)
 	image = models.ImageField(upload_to="image/%Y/%m", default=u"image/defult.png", max_length=100)
-	
+
 	class Meta:
-	    verbose_name = "用户信息"
-	    verbose_name_plural = verbose_name
-	
+	     verbose_name = u"用户信息"
+	     verbose_name_plural = verbose_name
 	def __str__(self):
-	    return self.username
+	   return self.username
 
 
 class EmailVerifyRecord(models.Model):
@@ -44,7 +43,7 @@ class Banner(models.Model):
 	url = models.URLField(max_length=200, verbose_name=u"访问地址")
 	index = models.IntegerField(default=100, verbose_name=u"顺序")
 	add_time = models.DateTimeField(default=datetime.now, verbose_name=u"添加时间")
-	
+
 	class Meta:
 	    verbose_name = u"轮播图"
 	    verbose_name_plural = verbose_name

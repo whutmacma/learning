@@ -16,7 +16,7 @@ import sys
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # set the path of the apps as the app_root path
 sys.path.insert(0,os.path.join(BASE_DIR,'apps'))
-# 
+#
 sys.path.insert(0,os.path.join(BASE_DIR,'extra_apps'))
 
 # Quick-start development settings - unsuitable for production
@@ -43,11 +43,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     #nginx静态文件处理能力更强
     'django.contrib.staticfiles',
-    
+
     'xadmin',
-    'crispy_forms',    
+    'crispy_forms',
     'reversion',
-    'captcha',    
+    'captcha',
 
     #'message',
     'users',
@@ -55,7 +55,7 @@ INSTALLED_APPS = [
     'organization',
     'operation',
 ]
-AUTH_USER_MODEL = "users.UserProfile" 
+AUTH_USER_MODEL = "users.UserProfile"
 
 
 MIDDLEWARE = [
@@ -126,9 +126,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-hans'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
@@ -145,9 +145,11 @@ STATIC_URL = '/static/'
 #	os.path.join(BASE_DIR,'static')
 #]
 #STATIC_ROOT = os.path.join(BASE_DIR,'static')
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = "smtp.163.com"
-EMAIL_PORT = 25
+EMAIL_PORT = 465
 EMAIL_HOST_USER = "whutmachangcong@163.com"
 EMAIL_HOST_PASSWORD = "tdl2018"
 EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
 EMAIL_FROM = "whutmachangcong@163.com"

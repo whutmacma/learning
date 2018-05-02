@@ -4,7 +4,7 @@ from random import Random
 from django.core.mail import send_mail
 
 
-from users.models import EmailVerifyRecord 
+from users.models import EmailVerifyRecord
 from learning.settings import EMAIL_FROM
 
 def random_str(randomlength=8):
@@ -13,7 +13,7 @@ def random_str(randomlength=8):
     length = len(chars) - 1
     random = Random()
     for i in range(randomlength):
-        str += chars[random,randint(0, length)]
+        str += chars[random.randint(0, length)]
     return str
 
 
@@ -30,9 +30,17 @@ def send_register_email(email, send_type="register"):
 
     if send_type == "register":
        email_title = u"TDL在线学习网注册链接"
-       email_body = u"请点击下面的链接激活你的长账号：http://47.94.236.221/active/{0}".format(code)
-       
+       email_body = u"请点击下面的链接激活你的账号：http://47.94.236.221/active/{0}".format(code)
+
        send_status = send_mail(email_title, email_body, EMAIL_FROM, [email])
        if send_status:
-          pass      
+         pass
+    elif send_type == "forget":
+       email_title = u"TDL在线学习网密码重置链接"
+       email_body = u"请点击下面的链接重置密码：http://47.94.236.221/reset/{0}".format(code)
+
+       send_status = send_mail(email_title, email_body, EMAIL_FROM, [email])
+       if send_status:
+         pass
+
 
