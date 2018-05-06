@@ -1,7 +1,10 @@
 # _*_ encoding: utf-8
+#用户管理相关表单过滤
+#变量名要与表单key一致
 
 from django import forms
 from captcha.fields import CaptchaField
+
 
 class LoginForm(forms.Form):
     username = forms.CharField(required=True)

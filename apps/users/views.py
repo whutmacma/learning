@@ -1,3 +1,7 @@
+#账户注册、登录、密码找回
+#用户验证机制重构
+#用户管理的所有逻辑
+#
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.backends import ModelBackend
@@ -6,12 +10,15 @@ from django.views.generic.base import View
 from django.contrib.auth.hashers import make_password
 
 from .models import UserProfile, EmailVerifyRecord
+#表单过滤
 from .forms import LoginForm, RegisterForm, ForgetPasswordForm, ResetUserForm
 from utils.email_send import send_register_email
 
+
+#重构用户验证机制
 class CustomBackend(ModelBackend):
     def authenticate(self, username=None, password=None, **kwargs):
-        try:
+        try:#Q 复杂数学运算 email与username均可作为登录用户名
            user = UserProfile.objects.get(Q(username=username) | Q(email=username) )
            if user.check_password(password):
                 return user
@@ -19,6 +26,7 @@ class CustomBackend(ModelBackend):
            return None
 
 
+#激活账户
 class ActiveUserView(View):
     def get(self, request, active_code):
         all_records = EmailVerifyRecord.objects.filter(code=active_code)
@@ -33,10 +41,12 @@ class ActiveUserView(View):
         return render(request, "login.html")
 
 
+#注册逻辑
 class RegisterView(View):
       def get(self, request):
           register_form = RegisterForm()
           return render(request, "register.html", {'register_form':register_form})
+
       def post(self, request):
           register_form = RegisterForm(request.POST)
           if register_form.is_valid():
@@ -47,15 +57,16 @@ class RegisterView(View):
               user_profile = UserProfile()
               user_profile.username = user_name
               user_profile.email = user_name
-              user_profile.password = make_password(password)
+              user_profile.password = make_password(password)#密码加密
               user_profile.save()
 
-              send_register_email(user_name, "register")
+              send_register_email(user_name, "register")#发送激活邮件
               return render(request, "login.html")
           else:
               return render(request, "register.html",{"register_form":register_form})
 
 
+#登录机制
 class LoginView(View):
       def get(self, request):
          return render(request, "login.html")
@@ -79,10 +90,12 @@ class LoginView(View):
              return render(request, "login.html",{"login_form":login_form})
 
 
+#密码找回
 class ForgetPasswordView(View):
     def get(self, request):
         forget_password_form = ForgetPasswordForm()
         return render(request, "forget_password.html",{"forget_password_form":forget_password_form})
+
     def post(self, request):
         forget_password_form = ForgetPasswordForm(request.POST)
         if forget_password_form.is_valid():
@@ -93,6 +106,7 @@ class ForgetPasswordView(View):
             return render(request, "forget_password.html", {"forget_password_form":forget_password_form})
 
 
+#用户属性重置
 class ResetUserView(View):
     def get(self, request,reset_code):
         all_records = EmailVerifyRecord.objects.filter(code=reset_code)
@@ -102,6 +116,7 @@ class ResetUserView(View):
                 return render(request, "password_reset.html",{"email":email})
         else:
             return render(request, "active_fail.html")
+
     def post(self, request):
         reset_user_form = ResetUserForm(request.POST)
         if reset_user_form.is_valid():

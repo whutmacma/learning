@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'reversion',
     'captcha',
+    'pure_pagination',
 
     #'message',
     'users',
@@ -57,6 +58,12 @@ INSTALLED_APPS = [
 ]
 AUTH_USER_MODEL = "users.UserProfile"
 
+PAGINATION_SETTINGS = {
+        'PAGE_RANGE_DISPLAYED': 5,
+        'MARGIN_PAGES_DISPLAYED': 2,
+
+        'SHOW_FIRST_PAGE_WHEN_INVALID': True,
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -81,6 +88,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',
             ],
         },
     },
@@ -145,6 +153,10 @@ STATIC_URL = '/static/'
 #	os.path.join(BASE_DIR,'static')
 #]
 #STATIC_ROOT = os.path.join(BASE_DIR,'static')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = "smtp.163.com"
 EMAIL_PORT = 465

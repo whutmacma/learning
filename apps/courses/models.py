@@ -27,7 +27,7 @@ class Course(models.Model):
 class Lesson(models.Model):
 	course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name=u"课程")
 	name = models.CharField(max_length=100, verbose_name=u"章节名")
-	addd_time = models.DateTimeField(default=datetime.now, verbose_name=u"添加时间")
+	add_time = models.DateTimeField(default=datetime.now, verbose_name=u"添加时间")
 
 
 	class Meta:
@@ -35,10 +35,10 @@ class Lesson(models.Model):
 	   verbose_name_plural = verbose_name
 
 
-class Video(models.Model):	
+class Video(models.Model):
 	lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, verbose_name=u"章节")
 	name = models.CharField(max_length=100, verbose_name=u"视频名")
-	addd_time = models.DateTimeField(default=datetime.now, verbose_name=u"添加时间")	
+	add_time = models.DateTimeField(default=datetime.now, verbose_name=u"添加时间")
 
 	class Meta:
 	   verbose_name = u"视频"
