@@ -34,9 +34,9 @@
 			<h2>所在地区</h2>
 			<div class="more">更多</div>
 			<div class="cont">
-				<a href="?ct="><span class="{% ifequal city_id '' %}active2{% endifequal %%}">全部</span></a>
+	                    <a href="?ct="><span class="active2">全部</span></a>
 			    {% for city in all_citys %}
-		 	         <a href="?city={{ city.id }}&ct="><span class="{% ifequal city_id city.id|stringformat:"i" %} active2 {% endifequal %}">{{ city.name }}</span></a>
+			    <a href="?city=1&ct="><span class="">{{ city.name }}</span></a>
 			    {% endfor %}
 			</div>
 		    </li>
@@ -89,7 +89,9 @@
 	<div class="pageturn">
              <ul class="pagelist">
 		  {% if all_organizations.has_previous %}
-		       <li class="long"><a href="?{{ all_organizations.previous_page_number.querystring }}">上一页</a></li>
+		       <li><a href="?{{ all_organizations.previous_page_number.querystring }}" class="prev">&lsaquo;&lsaquo; {% trans "previous" %}</a></li>
+		  {% else %}
+		       <li> <span class="disabled prev">&lsaquo;&lsaquo; {% trans "previous" %}</span></li>
 		  {% endif %}
 
 		  {% for page in all_organizations.pages %}
@@ -105,7 +107,10 @@
 		  {% endfor %}
 
 		  {% if all_organizations.has_next %}
-		       <li class="long"><a href="?{{ all_organizations.next_page_number.querystring }}">下一页</a></li>
+		  <li class="long"><a href="?page=2">下一页</a></li>    
+		  <li> <a href="?{{ all_organizations.next_page_number.querystring }}" class="prev">{% trans "next" %} &rsaquo;&rsaquo;</a></li>
+		  {% else %}
+		      <li><span class="disabled prev">{% trans "next" %} &rsaquo;&rsaquo;</span></li>
 	          {% endif %}
 	     </ul>
         </div>	
