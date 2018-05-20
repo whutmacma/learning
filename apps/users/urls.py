@@ -1,5 +1,6 @@
 from django.urls import re_path, include
-from users.views import LoginView, RegisterView, ActiveUserView, ForgetPasswordView, ResetUserView
+
+from users.views import LoginView, ActiveUserView, RegisterView, ForgetPasswordView, ResetUserView
 
 
 urlpatterns = [

@@ -9,7 +9,7 @@ from django.db.models import Q
 from django.views.generic.base import View
 from django.contrib.auth.hashers import make_password
 
-from .models import UserProfile, EmailVerifyRecord
+from users.models import UserProfile, EmailVerifyRecord
 #表单过滤
 from .forms import LoginForm, RegisterForm, ForgetPasswordForm, ResetUserForm
 from utils.email_send import send_register_email

@@ -1,0 +1,19 @@
+{% extends 'org_base.html' %}
+{% load staticfiles %}
+
+
+{% block organization_bar %}
+<li>机构介绍 <li/>
+{% endblock %}
+
+
+{% block organization_descript %}
+<div class="right companycenter layout" >
+	<div class="head">
+		<h1>机构介绍</h1>
+		<a class="green fr more" href="org-detail-desc.html">查看更多  >  </a>
+	</div>
+	<div class="cont">&nbsp; &nbsp; {{ organization.desc }}<a href="/company/desc/22/"><span class="green">[查看更多]</span></a></div>
+</div>
+{%  endblock %}
+
