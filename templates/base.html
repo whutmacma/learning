@@ -96,14 +96,28 @@
     </header>
 </section>
 
-{% block custom_bread  %}
-{% endblock %}
+{% if template_category %}
+<section>
+<div class="wp">
+    <ul  class="crumbs">
+	<li><a href="/index">首页</a>></li>
+	<li>
+             {% block crumbs %}
+	     {% if template_category == "course_list" %}公共课
+	     {% elif template_category == "teacher_list" %}授课老师
+	     {% elif template_category == "org_list" %}授课机构
+	     {% endif %}
+             {% endblock %}
+	</li>
+    </ul>
+</div>
+</section>
+{% endif %}
+
 
 {% block content %}
 {% endblock %}
 
-{% block crumbs %}
-{% endblock %}
 
 {% block feature %}
 {% endblock %}

@@ -4,16 +4,6 @@
 
 {% block title %} index {% endblock %}
 
-{% block custom_bread  %}
-<section>
-<div class="wp">
-     <ul  class="crumbs">
-         <li><a href="index.html">首页</a>></li>
-         <li>授课机构</li>
-     </ul>
-</div>
-</section>
-{% endblock %}
 
 {% block content %}
 <section>
@@ -97,7 +87,7 @@
 		  {% endif %}
 
 		  {% for page in all_organizations.pages %}
-		      {% if page %}
+		     {% if page %}
 		        {% ifequal page all_organizations.number %}
 		   	     <li class="active"><a class="active">{{ page }}</a></li>
 		        {% else %}

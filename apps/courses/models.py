@@ -21,12 +21,18 @@ class Course(models.Model):
     image = models.ImageField(upload_to="courses/%Y/%m", verbose_name=u"封面图")
     click_nums = models.IntegerField(default=0, verbose_name=u"点击数")
     add_time = models.DateTimeField(default=datetime.now, verbose_name=u"添加次数")
+    category = models.CharField(default=u"Web后端", max_length=20, verbose_name=u"课程类别")
 
     class Meta:
         verbose_name = u"课程"
         verbose_name_plural = verbose_name
     def __str__(self):
         return self.name
+    def get_lesson_nums(self):
+        return self.lesson_set.all().count()
+    def get_learn_users(self):
+        return self.usercourse_set.all()[:5]
+
 
 class Lesson(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name=u"课程")
