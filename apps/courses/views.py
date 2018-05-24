@@ -46,9 +46,15 @@ class CourseDetailView(View):
         #learn_users = course_detail.get_learn_users()
         course_detail.click_nums += 1
         course_detail.save()
+
+        tag = course_detail.tag
+        relate_courses =""
+        if tag:
+            relate_courses =  Course.objects.filter(tag=tag)[:1]
         return render(request, 'course-detail.html', {
             "template_category":template_category,
             "course_detail":course_detail,
+            "relate_courses":relate_courses
         })
 
 
