@@ -452,7 +452,7 @@ class MultiSelectFieldListFilter(ListFieldFilter):
     """ Delegates the filter to the default filter and ors the results of each
 
     Lists the distinct values of each field as a checkbox
-    Uses the default spec for each 
+    Uses the default spec for each
 
     """
     template = 'xadmin/filters/checklist.html'

@@ -1,0 +1,80 @@
+{% extends 'course-video.html' %}
+{% load staticfiles %}
+
+{% block custom_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/muke/base.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/muke/common-less.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/muke/course/learn-less.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/aui.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/mooc.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/muke/course/common-less.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/muke/course/course-comment.css' %}" />
+
+
+{% endblock %}
+
+{% block content_choice %}
+<div id="js-pub-container" class="issques clearfix js-form">
+    <div class="wgt-ipt-wrap pub-editor-wrap " id="js-pl-input-fake">
+        <textarea id="js-pl-textarea" class="" placeholder="扯淡、吐槽、表扬、鼓励……想说啥就说啥！" ></textarea>
+    </div>
+    <input type="button" id="js-pl-submit" class="pub-btn" data-cid="452" value="发表评论">
+    <p class="global-errortip js-global-error"></p>
+</div>
+<div id="course_note">
+    <ul class="mod-post" id="comment-list">
+	{% for current_comment in all_comments %}
+        <li class="post-row">
+            <div class="media">
+		    <span target="_blank"><img src="{{ MEDIA_URL }}{{ current_comment.user.image  }}" width='40' height='40' /></span>
+            </div>
+	    <div class="bd">
+		<div class="tit">
+			<span target="_blank">{{ current_comment.user.nick_name }}</span>
+		</div>
+		<p class="cnt">{{ current_comment.comments }}</p>
+                <div class="footer clearfix">
+                    <span title="创建时间" class="l timeago">时间：2016年12月13日 22:14</span>
+                </div>
+            </div>
+        </li>
+	{% endfor %}
+    </ul>
+</div>
+{% endblock %}
+
+
+{% block custom_js %}
+<script type="text/javascript">
+//添加评论
+ $('#js-pl-submit').on('click', function(){
+     var comments = $("#js-pl-textarea").val()
+         if(comments == ""){
+             alert("评论不能为空")
+                 return
+     }
+     $.ajax({
+          cache: false,
+          type: "POST",
+	  url:"{% url 'course_comment' course_detail.id %}",
+	  data:{'comments':comments},
+          async: true,
+          beforeSend:function(xhr, settings){			
+                  xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                  },
+          success: function(data) {
+		  if(data.status == 'fail'){				
+			  if(data.msg == '用户未登录'){
+				  window.location.href="/login/";	
+			  }else{
+	                      alert(data.msg)
+	                  }							
+		  }else if(data.status == 'success'){
+   			  window.location.reload();//刷新当前页面.				
+		  }
+	  },
+       });
+   });
+</script>
+{% endblock %}
+

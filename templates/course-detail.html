@@ -1,18 +1,10 @@
 {% extends 'base.html' %}
+{% load staticfiles %}
 
-<section>
-    <div class="wp">
-        <div class="crumbs">
-            <ul>
-                <li><a href="index.html">首页</a>></li>
-                {% block crumbs %}
-                <li><a href="/course_list">公开课程</a>></li>
-                <li>课程详情</li>
-                {% endblock %}
-            </ul>
-        </div>
-    </div>
-</section>
+{% block crumbs %}
+<li><a href="/course_list">公开课程</a>></li>
+<li>课程详情</li>
+{% endblock %}
 
 {% block content %}
 <section>
@@ -43,8 +35,14 @@
 			    </li>
                          </ul>
                          <div class="btns">
-                             <div class="btn colectgroupbtn"  id="jsLeftBtn">收藏</div>
-                             <div class="buy btn"><a style="color: white" href="course-video.html">开始学习</a></div>
+                             <div class="btn colectgroupbtn"  id="jsLeftBtn">
+				     {% if has_fav_course %}
+				     已收藏
+				     {% else %}
+				     收藏
+				     {% endif %}
+			     </div>
+			     <div class="buy btn"><a style="color: white" href="/course_video/{{ course_detail.id }}">开始学习</a></div>
                          </div>
                      </div>
                      <div class="group-share-box">
@@ -68,31 +66,37 @@
                          <h1>授课机构</h1>
                          <p>世界名校，课程权威</p>
                      </div>
+		     {% for current_course in relate_courses  %}
                      <div class="pic">
-                         <a href="/company/14/">
-                             <img width="150" height="80" src="../media/org/2016/11/bjdx.jpg"/>
+			     <a href="/org_list/home/{{ current_course.course_organization.id }}">
+				     <img width="150" height="80" src="{{ MEDIA_URL }}{{ current_course.course_organization.image }}"/>
                          </a>
                     </div>
-                    <a href="/company/14/">
-                        <h2 class="center" title="清华大学">北京大学</h2>
+                    <a href="/org_list/home/{{ current_course.course_organization.id }}">
+			    <h2 class="center" title="清华大学">{{ current_course.course_organization.name }}</h2>
                     </a>
                     <div class="btn  notlogin" data-favid="14" id="jsRightBtn">
-                        已收藏
+			    {% if has_fav_organization %}
+			    已收藏
+			    {% else %}
+			    收藏
+			    {% endif %}
                     </div>
                     <div class="clear">
                         <ul>
                             <li>
-                                <span>课 &nbsp;程&nbsp; 数：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   5</span>
+				    <span>课 &nbsp;程&nbsp; 数：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   {{ current_course.course_organization.course_nums }}</span>
                             </li>
                             <li>
-                                <span>教 &nbsp;师&nbsp; 数：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  0</span>
+				    <span>教 &nbsp;师&nbsp; 数：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  {{ current_course.course_organization.get_teacher_nums }}</span>
                             </li>
-                            <li>所在地区：&nbsp;&nbsp;北京市</li>
+			    <li>所在地区：&nbsp;&nbsp;{{ current_course.course_organization.city }}</li>
                             <li>认&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;证&nbsp;:&nbsp;&nbsp;
-                                <img title="金牌机构", src="../images/gold.png"/>
+				    <img title="金牌机构", src="{% static "images/gold.png" %}"/>
                             </li>
                         </ul>
                     </div>
+		    {% endfor %}
                 </div>
             </div>
         </div>
@@ -178,6 +182,7 @@
              </div>
              <div class="right layout">
              <div class="head">相关课程推荐</div>
+
                  <div class="group_recommend">         
                      <dl>
                          <dt>
@@ -204,11 +209,11 @@ function add_fav(current_elem, fav_id, fav_type){
     $.ajax({
         cache: false,
         type: "POST",
-        url:"/org/add_fav/",
+	url:"{% url "add_favorite" %}",
         data:{'fav_id':fav_id, 'fav_type':fav_type},
         async: true,
         beforeSend:function(xhr, settings){
-            xhr.setRequestHeader("X-CSRFToken", "5I2SlleZJOMUX9QbwYLUIAOshdrdpRcy");
+		xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
         },
         success: function(data) {
             if(data.status == 'fail'){
@@ -226,11 +231,11 @@ function add_fav(current_elem, fav_id, fav_type){
 }
 
 $('#jsLeftBtn').on('click', function(){
-    add_fav($(this), 10, 1);
+	add_fav($(this), {{ course_detail.id }}, 1);
 });
 
 $('#jsRightBtn').on('click', function(){
-    add_fav($(this), 2, 2);
+	add_fav($(this), {{ course_detail.course_organization.id }}, 2);
 });
 
 
