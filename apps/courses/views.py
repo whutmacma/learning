@@ -6,8 +6,8 @@ from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 
 
 from courses.models import Course, CourseResource
-from operation.models import UserFavorite, CourseComments
-
+from operation.models import UserFavorite, CourseComments, UserCourse
+from utils.mixin_utils import LoginRequiredMixin
 # Create your views here.
 
 
@@ -49,7 +49,7 @@ class CourseDetailView(View):
         course_detail.click_nums += 1
         course_detail.save()
 
-        has_fav_course=has_fav_organization=""
+        has_fav_course=has_fav_organization=False
         if request.user.is_authenticated:
             if UserFavorite.objects.filter(user=request.user, fav_id=course_detail.id, fav_type=1):
                 has_fav_course = True
@@ -69,31 +69,53 @@ class CourseDetailView(View):
         })
 
 
-class CourseVideoView(View):
+class CourseVideoView(LoginRequiredMixin, View):
     def get(self, request, course_id):
         template_category = "course_list"
         course_detail = Course.objects.get(id=int(course_id))
         all_resources = CourseResource.objects.filter(course=course_detail.id)
 
-        return render(request, 'course-video.html',{
+        user_courses = UserCourse.objects.filter(user=request.user, course=course_detail)
+        if not user_courses:
+            user_course = UserCourse(user=request.user, course=course_detail)
+            user_course.save()
+            course_detail.students +=1
+            course_detail.save()
+
+        user_courses = UserCourse.objects.filter(course_id=course_id)
+        user_ids = [ user.user_id for user in user_courses ]
+        all_user_courses = UserCourse.objects.filter(user_id__in=user_ids)
+        course_ids = [ course.course_id for course in all_user_courses]
+        course_names = Course.objects.filter(id__in=course_ids).order_by('-click_nums')[:5]
+
+        return render(request, 'course-play.html',{
             "template_category":template_category,
             "course_detail":course_detail,
-            "all_resources":all_resources
+            "all_resources":all_resources,
+            "relate_courses":course_names
         })
 
 
-class CourseCommentView(View):
+class CourseCommentView(LoginRequiredMixin, View):
     def get(self, request, course_id):
         template_category = "course_list"
         course_detail = Course.objects.get(id=int(course_id))
         all_resources = CourseResource.objects.filter(course=course_detail.id)
         all_comments = CourseComments.objects.all()
 
+        user_courses = UserCourse.objects.filter(course_id=course_id)
+        user_ids = [ user.user_id for user in user_courses ]
+        all_user_courses = UserCourse.objects.filter(user_id__in=user_ids)
+        course_ids = [ course.course_id for course in all_user_courses]
+        course_names = Course.objects.filter(id__in=course_ids).order_by('-click_nums')[:5]
+
+
         return render(request, 'course-comment.html', {
             "template_category":template_category,
             "course_detail":course_detail,
             "all_resources":all_resources,
-            "all_comments":all_comments
+            "all_comments":all_comments,
+            "relate_courses":course_names
         })
     def post(self, request, course_id):
         if not request.user.is_authenticated:
