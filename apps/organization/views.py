@@ -3,10 +3,10 @@ from django.views.generic import View
 from django.http import HttpResponse, JsonResponse
 
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
+from pure_pagination.mixins import PaginationMixin
 
-
-from .models import CourseOrg, CityDict
-from .forms import UserAskForm
+from organization.models import CourseOrg, CityDict, Teacher
+from organization.forms import UserAskForm
 from operation.models import UserFavorite
 from courses.models import Course
 # Create your views here.
@@ -138,6 +138,28 @@ class OrganizationDescriptView(View):
             'organization':course_organization,
             'current_page':current_page
         })
+
+
+
+class TeacherListView(View):
+    def get(self, request):
+        template_category = "teacher_list"
+        teacher_list = Teacher.objects.all()
+        hot_teacher_list = teacher_list.order_by("-click_nums")[:5]
+
+        try:
+            page = request.GET.get('page',1)
+        except PageNotAnInteger:
+            page = 1
+        p = Paginator(teacher_list, 1, request=request)
+        teacher_desc_list = p.page(page)
+
+        return render(request, 'teachers-list.html', {
+            "template_category":template_category,
+            "teacher_desc_list":teacher_desc_list,
+            "hot_teacher_list":hot_teacher_list
+        })
+
 
 
 
