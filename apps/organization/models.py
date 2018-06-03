@@ -37,6 +37,8 @@ class CourseOrg(models.Model):
         return self.name
     def get_teacher_nums(self):
         return self.teacher_set.all().count()
+    def get_teacher(self):
+        return self.teacher_set.all()
 
 
 class Teacher(models.Model):
@@ -57,4 +59,7 @@ class Teacher(models.Model):
         verbose_name_plural = verbose_name
     def __str__(self):
         return self.name
+    def get_course(self):
+        return self.course_set.all()
+
 

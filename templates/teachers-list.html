@@ -8,15 +8,15 @@
         <div class="butler_list layout">
             <div class="head">
                 <ul class="fl tab_header">
-                    <li class="active"><a href="?sort=">全部</a> </li>
-                    <li ><a href="?sort=hot">人气 &#8595;</a></li>
+                    <li {% if not sort  %} class="active" {% endif  %}><a href="?sort=">全部</a> </li>
+                    <li {% ifequal sort 'hot'  %} class="active" {% endifequal  %}><a href="?sort=hot">人气 &#8595;</a></li>
                 </ul>
                 <div class="fr butler-num">共<span class="key">9</span>人&nbsp;&nbsp;&nbsp;</div>
             </div>
 	    {% for current_teacher in teacher_desc_list.object_list %}
 	    <dl class="des">
                 <dt>
-		<a href="/dd">
+		<a href="{% url 'teacher_detail' current_teacher.id  %}">
                         <div class="picpic">
 				<img width="100" height="100" class="scrollLoading" src="{{ MEDIA_URL }}{{ current_teacher.image }}"/>
                         </div>
@@ -29,7 +29,7 @@
                     </div>
                 </dt>
                 <dd>
-                    <a href="/org/teacher/detail/1/">
+                    <a href="{% url 'teacher_detail' current_teacher.id  %}">
 			    <h1>{{ current_teacher.name }}<span class="key picbig">金牌讲师</span></h1>
                     </a>
                     <ul class="cont">
@@ -40,7 +40,7 @@
                         <li>教学特点：<span>{{ current_teacher.points }}</span></li>
                     </ul>
                 </dd>
-                <a class="buy buyservice" href="/org/teacher/detail/1/"><br/>查看<br/>详情</a>
+                <a class="buy buyservice" href="{% url 'teacher_detail' current_teacher.id  %}" ><br/>查看<br/>详情</a>
             </dl>
 	    {% endfor %}
         </div>

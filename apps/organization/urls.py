@@ -1,5 +1,5 @@
 from django.urls import re_path, include
-from organization.views import OrganizationView, AddFavoriteView, AddUserAskView, OrganizationHomeView, OrganizationCourseListView, OrganizationTeacherListView, OrganizationDescriptView, TeacherListView
+from organization.views import OrganizationView, AddFavoriteView, AddUserAskView, OrganizationHomeView, OrganizationCourseListView, OrganizationTeacherListView, OrganizationDescriptView, TeacherListView, TeacherDetailView
 
 urlpatterns = [
     re_path(r'^org_list/$',OrganizationView.as_view(), name="org_list"),
@@ -10,5 +10,6 @@ urlpatterns = [
     re_path(r'^org_list/descript/(?P<organization_id>\d+)/$',OrganizationDescriptView.as_view(), name="org_descript"),
     re_path(r'^add_fav/$', AddFavoriteView.as_view(), name="add_favorite"),
 
-    re_path(r'^teacher_list/$', TeacherListView.as_view(), name="teacher_list" )
+    re_path(r'^teacher_list/$', TeacherListView.as_view(), name="teacher_list"),
+    re_path(r'^teacher/detail/(?P<teacher_id>\d+)$', TeacherDetailView.as_view(), name="teacher_detail" )
 ]
