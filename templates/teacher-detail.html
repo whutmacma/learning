@@ -1,7 +1,5 @@
 {% extends 'base.html' %}
 
-
-
 {% block content %}
 <section>
     <div class="wp butler-detail-box butler-diaryd-box clearfix">
@@ -15,20 +13,24 @@
                             </div>
                             <div class="btn">
                                 <span class="fl btn1 collectionbtn" id="jsLeftBtn">
-                                     收藏
+                                {% if has_fav_teacher  %}
+                                     已收藏
+				{% else %}
+				     收藏
+				{% endif %}
                                 </span>
                                 <span class="fr btn2 shareBtn bdsharebuttonbox"
                                       data-text="授课教师-李老师-慕学网"
                                       data-desc="我在#慕课网#发现了"
                                       data-comment="李老师，工作年限：5年；学历：本科；所在公司：阿里巴巴&nbsp;；经典案例：django入门和深入；flask入门"
-                                      data-url="/diary/hk_detail/10/">
+                                      data-url="">
                                     <span class="fl">分享</span>
                                     <a href="#" class="bds_more" data-cmd="more"></a>
                                 </span>
                             </div>
                         </dt>
                         <dd>
-                            <a href="/diary/hk_detail/10/">
+                            <a href="">
                                 <h1>{{ teacher_detail.name }}<span class="key picbig">金牌讲师</span></h1>
                             </a>
                             <ul class="cont">
@@ -53,11 +55,11 @@
                            
 			    {% for current_course in course_list %}	
                             <div class="module1_5 box">
-                                <a href="course-detail.html">
+                                <a href="{% url "course_detail" current_course.id  %}">
                                     <img width="214" height="190" class="scrollLoading" src="{{ MEDIA_URL }}{{ current_course.image }}"/>
                                 </a>
                                 <div class="des">
-                                    <a href="course-detail.html"><h2>{{ current_course.name }}</h2></a>
+                                    <a href="{% url "course_detail" current_course.id  %}"><h2>{{ current_course.name }}</h2></a>
                                     <span class="fl">时长：<i class="key">{{ current_course.learn_time }}</i></span>
                                     <span class="fr">学习人数：{{ current_course.students }}</span>
                                 </div>
@@ -86,15 +88,21 @@
                     <p>知名高校，权威教学</p>
                 </div>
                 <div class="pic">
-                    <a href="org-detail-homepage.html">
+                    <a href="{% url "org_home" teacher_detail.org.id  %}">
 			    <img width="150" height="80" src="{{ MEDIA_URL }}{{ teacher_detail.org.image }}"/>
                     </a>
                 </div>
-                <a href="org-detail-homepage.html">
+                <a href="{% url "org_home" teacher_detail.org.id  %}">
                     <h2 class="center">{{ teacher_detail.org.name }}</h2>
                 </a>
                 <p class="center tell">地址：{{ teacher_detail.org.address }}</p>
-                <a class="btn" id="jsRightBtn">收藏</a>
+                <a class="btn" id="jsRightBtn">
+			{% if has_fav_organization  %}
+			已收藏
+			{% else %}
+			收藏
+			{% endif %}
+		</a>
             </div>
             </div>
             <div class="butler_detail_cont">
@@ -104,13 +112,13 @@
 			{% for current_teacher in hot_teacher %} 
                         <dl class="des">
                             <span class="num fl">1</span>
-                            <a href="/org/teacher/detail/2/">
+                            <a href="{% url "teacher_detail" current_teacher.id  %}">
                                 <dt>
                                     <img width="50" height="50" class="scrollLoading" src="{{ MEDIA_URL }}{{ current_teacher.image }}"/>
                                 </dt>
                             </a>
                             <dd>
-                                <a href="/org/teacher/detail/2/">
+                                <a href="{% url "teacher_detail" current_teacher.id  %}">
                                     <h1 title="还是bobby">{{ current_teacher.name }}</h1>
                                 </a>
                                 <p>工作年限：<span>{{ current_teacher.work_years }}年</span></p>
@@ -126,17 +134,18 @@
 </section>
 {% endblock %}
 
+{% block custom_js %}
 <script type="text/javascript">
 //收藏分享
 function add_fav(current_elem, fav_id, fav_type){
     $.ajax({
         cache: false,
         type: "POST",
-        url:"/org/add_fav/",
+	url:"{% url "add_favorite" %}",
         data:{'fav_id':fav_id, 'fav_type':fav_type},
         async: true,
         beforeSend:function(xhr, settings){
-            xhr.setRequestHeader("X-CSRFToken", "5I2SlleZJOMUX9QbwYLUIAOshdrdpRcy");
+		xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token}}");
         },
         success: function(data) {
             if(data.status == 'fail'){
@@ -163,5 +172,5 @@ $('#jsRightBtn').on('click', function(){
 
 
 </script>
-
+{% endblock %}
 

@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import View
 from django.http import HttpResponse, JsonResponse
+from django.db.models import Q
 
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 from pure_pagination.mixins import PaginationMixin
@@ -14,7 +15,6 @@ from courses.models import Course
 
 class OrganizationView(View):
     def get(self, request):
-        template_category = "org_list"
         all_organizations = CourseOrg.objects.all()
         all_citys = CityDict.objects.all()
         hot_organizations = all_organizations.order_by("-click_nums")[:3]
@@ -31,6 +31,8 @@ class OrganizationView(View):
                 all_organizations = all_organizations.order_by("-student_nums")
             if sort == "course_nums":
                 all_organizations = all_organizations.order_by("-course_nums")
+        search = request.GET.get('keywords','')
+        all_organizations = all_organizations.filter( Q(desc__icontains=search)|Q(name__icontains=search)|Q(address__icontains=search))
 
         organization_nums = all_organizations.count()
         try:
@@ -42,7 +44,6 @@ class OrganizationView(View):
         orgs = p.page(page)
 
         return render(request, "org-list.html", {
-            "template_category":template_category,
             "all_organizations":orgs,
             "all_citys":all_citys,
             "organization_nums":organization_nums,
@@ -143,23 +144,23 @@ class OrganizationDescriptView(View):
 
 class TeacherListView(View):
     def get(self, request):
-        template_category = "teacher_list"
         teacher_list = Teacher.objects.all()
         hot_teacher_list = teacher_list.order_by("-click_nums")[:5]
 
         sort = request.GET.get('sort','')
         if sort == 'hot':
             teacher_list = teacher_list.order_by('-click_nums')
+        search = request.GET.get('keywords','')
+        teacher_list = teacher_list.filter(Q(name__icontains=search)|Q(points__icontains=search))
 
         try:
             page = request.GET.get('page',1)
         except PageNotAnInteger:
             page = 1
-        p = Paginator(teacher_list, 55555, request=request)
+        p = Paginator(teacher_list, 5, request=request)
         teacher_desc_list = p.page(page)
 
         return render(request, 'teachers-list.html', {
-            "template_category":template_category,
             "teacher_desc_list":teacher_desc_list,
             "hot_teacher_list":hot_teacher_list,
             "sort":sort
@@ -168,17 +169,24 @@ class TeacherListView(View):
 
 class TeacherDetailView(View):
     def get(self, request, teacher_id ):
-        template_category = "teacher_list"
 
         teacher_detail = Teacher.objects.get(id=int(teacher_id))
         course_list = teacher_detail.get_course()
         organization_hot_teacher = teacher_detail.org.get_teacher().order_by('-click_nums')[:5]
 
+        has_fav_teacher = has_fav_organization = False
+        if request.user.is_authenticated:
+            if UserFavorite.objects.filter(fav_type=3, fav_id=int(teacher_id)):
+                has_hav_teacher = True
+            if UserFavorite.objects.filter(fav_type=2, fav_id=teacher_detail.org_id):
+                has_fav_organization = True
+
         return render(request, 'teacher-detail.html', {
-            "template_category":template_category,
             "teacher_detail":teacher_detail,
             "course_list":course_list,
-            "hot_teacher":organization_hot_teacher
+            "hot_teacher":organization_hot_teacher,
+            "has_fav_teacher":has_fav_teacher,
+            "has_fav_organization":has_fav_organization
         })
 
 

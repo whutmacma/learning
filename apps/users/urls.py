@@ -1,6 +1,6 @@
 from django.urls import re_path, include
 
-from users.views import LoginView, ActiveUserView, RegisterView, ForgetPasswordView, ResetUserView
+from users.views import LoginView, ActiveUserView, RegisterView, ForgetPasswordView, ResetUserView, UserCenterView
 
 
 urlpatterns = [
@@ -10,5 +10,6 @@ urlpatterns = [
     re_path(r'^active/(?P<active_code>.*)/$',ActiveUserView.as_view(), name="user_active"),
     re_path(r'^forget/$', ForgetPasswordView.as_view(), name="forget_password"),
     re_path(r'^reset/(?P<reset_code>.*)/$',ResetUserView.as_view(), name="reset_user"),
-    re_path(r'^reset/$',ResetUserView.as_view(), name="reset_user")
+    re_path(r'^reset/$',ResetUserView.as_view(), name="reset_user"),
+    re_path(r'^usercenter/$',UserCenterView.as_view(), name="usercenter")
 ]

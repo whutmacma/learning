@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import View
 from django.http import HttpResponse, JsonResponse
+from django.db.models import Q
 
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 
@@ -13,7 +14,6 @@ from utils.mixin_utils import LoginRequiredMixin
 
 class CourseView(View):
     def get(self, request):
-        template_category = "course_list"
         all_courses = Course.objects.all()
         hot_courses = all_courses.order_by("-click_nums")[:4]
 
@@ -22,6 +22,8 @@ class CourseView(View):
             all_courses = all_courses.order_by("-students")
         elif sort == "hot":
             all_courses = all_courses.order_by("-click_nums")
+        search = request.GET.get('keywords','')
+        all_courses = all_courses.filter(Q(name__icontains=search)|Q(desc__icontains=search)|Q(detail__icontains=search)|Q(category__icontains=search))
 
         try:
             page = request.GET.get('page', 1)
@@ -32,7 +34,6 @@ class CourseView(View):
 
 
         return render(request, 'course-list.html',{
-            "template_category":template_category,
             "sort": sort,
             "all_courses":courses,
             "hot_courses":hot_courses
@@ -41,7 +42,6 @@ class CourseView(View):
 
 class CourseDetailView(View):
     def get(self, request, course_id):
-        template_category = "course_list"
         course_detail = Course.objects.get(id=int(course_id))
 
         #lesson_nums = course_detail.get_lesson_nums()
@@ -61,7 +61,6 @@ class CourseDetailView(View):
         if tag:
             relate_courses =  Course.objects.filter(tag=tag)[:1]
         return render(request, 'course-detail.html', {
-            "template_category":template_category,
             "course_detail":course_detail,
             "relate_courses":relate_courses,
             "has_fav_course":has_fav_course,
@@ -71,7 +70,6 @@ class CourseDetailView(View):
 
 class CourseVideoView(LoginRequiredMixin, View):
     def get(self, request, course_id):
-        template_category = "course_list"
         course_detail = Course.objects.get(id=int(course_id))
         all_resources = CourseResource.objects.filter(course=course_detail.id)
 
@@ -89,7 +87,6 @@ class CourseVideoView(LoginRequiredMixin, View):
         course_names = Course.objects.filter(id__in=course_ids).order_by('-click_nums')[:5]
 
         return render(request, 'course-play.html',{
-            "template_category":template_category,
             "course_detail":course_detail,
             "all_resources":all_resources,
             "relate_courses":course_names
@@ -98,7 +95,6 @@ class CourseVideoView(LoginRequiredMixin, View):
 
 class CourseCommentView(LoginRequiredMixin, View):
     def get(self, request, course_id):
-        template_category = "course_list"
         course_detail = Course.objects.get(id=int(course_id))
         all_resources = CourseResource.objects.filter(course=course_detail.id)
         all_comments = CourseComments.objects.all()
@@ -111,7 +107,6 @@ class CourseCommentView(LoginRequiredMixin, View):
 
 
         return render(request, 'course-comment.html', {
-            "template_category":template_category,
             "course_detail":course_detail,
             "all_resources":all_resources,
             "all_comments":all_comments,

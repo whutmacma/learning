@@ -132,3 +132,11 @@ class ResetUserView(View):
                return render(request, "password_reset.html",{"email":email, "msg":u"密码不一致"})
 
 
+class UserCenterView(View):
+    def get(self, request):
+        return render(request, "usercenter.html")
+
+
+
+
+

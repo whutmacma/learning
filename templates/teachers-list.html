@@ -74,13 +74,13 @@
             {% for current_teacher in hot_teacher_list %}
             <dl class="des">
                 <span class="num fl">1</span>
-                <a href="/diary/hk_detail/6/">
+                <a href="{% url 'teacher_detail' current_teacher.id  %}">
                     <dt>
                         <img width="50" height="50" class="scrollLoading"  src="{{ MEDIA_URL }}{{ current_teacher.image }}"/>
                     </dt>
                 </a>
                 <dd>
-                    <a href="/diary/hk_detail/6/">
+                    <a href="{% url 'teacher_detail' current_teacher.id  %}">
                         <h1 title="还是bobby">{{ current_teacher.name }}</h1>
                     </a>
                     <p>工作年限：<span>{{ current_teacher.work_years }}年</span></p>
