@@ -1,0 +1,8 @@
+                <div class="head">
+                    <ul class="tab_header messagehead">
+			<li {% if request.path|slice:'-13:-1' == 'organization' %} class="active" {% endif %} ><a href="{% url 'my_fav_organization' %}">课程机构</a> </li>
+                        <li {% if request.path|slice:'-8:-1' == 'teacher' %} class="active" {% endif %}><a href="{% url 'my_fav_teacher' %}">授课教师 </a></li>
+                        <li {% if request.path|slice:'-7:-1' == 'course' %} class="active" {% endif %}><a href="{% url 'my_fav_course' %}">公开课程</a></li>
+                    </ul>
+                </div>
+

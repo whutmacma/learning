@@ -1,0 +1,54 @@
+{% extends 'usercenter-base.html' %}
+
+{% block  content %} 
+    <div class="right" >
+            <div class="personal_des Releasecont">
+                <div class="head">
+                    <h1>我的收藏</h1>
+                </div>
+            </div>
+            <div class="personal_des permessage">
+		{% include 'usercenter-fav.html' %} 
+                <div class="companycenter">
+                    <div class="group_list brief">
+			{% for current_course in user_fav_course %} 
+                        <div class="module1_5 box">
+				<a href="{% url 'course_detail' current_course.id %}">
+				    <img width="214" height="190" src="{{ MEDIA_URL }}{{ current_course.image }}"/>
+                            </a>
+                            <div class="des">
+				    <a href="{% url 'course_detail' current_course.id %}"><h2>{{ current_course.name }}</h2></a>
+                                <span class="fl">时长：<i class="key">{{ current_course.learn_time }}</i></span>
+                                <span class="fr">学习人数：{{ current_course.students }}</span>
+                            </div>
+                            <div class="bottom">
+                                <span class="fl">{{ current_course.name }}</span>
+                                <span class="delete-group fr jsDeleteFav_course" data-favid="13"></span>
+                            </div>
+                        </div>
+			{% endfor %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+	</div>
+</section>
+
+
+<!--sidebar start-->
+<section>
+    <ul class="sidebar">
+        <li class="qq">
+            <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2023525077&site=qq&menu=yes"></a>
+        </li>
+        <li class="totop"></li>
+    </ul>
+</section>
+<!--sidebar end-->
+<!--header start-->
+{% endblock %}
+
+

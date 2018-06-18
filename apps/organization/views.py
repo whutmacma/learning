@@ -40,7 +40,7 @@ class OrganizationView(View):
         except PageNotAnInteger:
             page = 1
 
-        p = Paginator(all_organizations, 55555, request=request)
+        p = Paginator(all_organizations, 5, request=request)
         orgs = p.page(page)
 
         return render(request, "org-list.html", {
@@ -60,7 +60,7 @@ class AddUserAskView(View):
         if userask_form.is_valid():
             user_ask = userask_form.save(commit=True)
         #   return HttpResponse("{'status':'scucess'}", content_type='application/json')
-            return JsonResponse({'status':'scucess'})
+            return JsonResponse({'status':'success'})
         else:
             return  JsonResponse({'status':'fail', 'msg':userask_form.errors })
         #   return HttpResponse("{'status':'fail','msg':'添加出错'}", content_type='application/json')

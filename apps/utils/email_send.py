@@ -44,3 +44,25 @@ def send_register_email(email, send_type="register"):
          pass
 
 
+def send_pin_email(email, send_type='reset_email'):
+    email_record = EmailVerifyRecord()
+    code = random_str(6)
+    email_record.code = code
+    email_record.email = email
+    email_record.send_type = send_type
+    email_record.save()
+    if send_type == "reset_email":
+       email_title = u"TDL在线学习网验证码"
+       email_body = u"修改邮箱的验证码：" + code
+
+       send_status = send_mail(email_title, email_body, EMAIL_FROM, [email])
+       if send_status:
+         pass
+
+
+
+
+
+
+
+
