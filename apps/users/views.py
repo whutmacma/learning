@@ -4,12 +4,13 @@
 #
 import  json
 from django.shortcuts import render
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.backends import ModelBackend
 from django.db.models import Q
+from django.urls import reverse
 from django.views.generic.base import View
 from django.contrib.auth.hashers import make_password
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 
 from users.models import UserProfile, EmailVerifyRecord
@@ -18,7 +19,8 @@ from users.forms import LoginForm, RegisterForm, ForgetPasswordForm, ResetUserFo
 from utils.email_send import send_register_email, send_pin_email
 from utils.mixin_utils import LoginRequiredMixin
 from operation.models import UserFavorite, UserCourse, UserMessage
-from courses.models import Course, Teacher, CourseOrg
+from courses.models import Course, Teacher
+from organization.models import CourseOrg
 
 
 #重构用户验证机制
@@ -74,10 +76,10 @@ class RegisterView(View):
 
 #登录机制
 class LoginView(View):
-      def get(self, request):
-         return render(request, "login.html")
+    def get(self, request):
+        return render(request, "login.html")
 
-      def post(self, request):
+    def post(self, request):
          login_form = LoginForm(request.POST)
          if login_form.is_valid():
               user_name = request.POST.get("username", "")
@@ -86,7 +88,13 @@ class LoginView(View):
               if user is not None:
                 if user.is_active:
                     login(request, user)
-                    return render(request, "index.html")
+                    #course_organization =  CourseOrg.objects.all().order_by('click_nums')[:8]
+                    #course_list = Course.objects.all().order_by('click_nums')[:7]
+                    return HttpResponseRedirect(reverse('index'))
+                    #render(request, "index.html", {
+                    #    "organization_list":course_organization,
+                    #    "course_list":course_list
+                    #})
                 else:
                     return render(request, "login.html",{"msg":"用户未激活"})
 
@@ -94,6 +102,11 @@ class LoginView(View):
                   return render(request, "login.html",{"msg":"用户名或密码错误！"})
          else:
              return render(request, "login.html",{"login_form":login_form})
+
+class LogoutView(View):
+    def get(self, request):
+        logout(request)
+        return render(request, 'index.html')
 
 
 #密码找回

@@ -1,10 +1,11 @@
 from django.urls import re_path, include
 
-from users.views import LoginView, ActiveUserView, RegisterView, ForgetPasswordView, ResetUserView, UserCenterView, UploadImageView, UpdatePasswordView, EmailPinView, UpdateEmailView, MyCourseView, MyFavoriteCourseView, MyFavoriteTeacherView, MyFavoriteOrganizationView, MyMessageView
+from users.views import LoginView, LogoutView, ActiveUserView, RegisterView, ForgetPasswordView, ResetUserView, UserCenterView, UploadImageView, UpdatePasswordView, EmailPinView, UpdateEmailView, MyCourseView, MyFavoriteCourseView, MyFavoriteTeacherView, MyFavoriteOrganizationView, MyMessageView
 
 
 urlpatterns = [
     re_path(r'^login/$', LoginView.as_view(), name="login"),
+    re_path(r'^logout/$', LogoutView.as_view(), name="logout"),
     re_path(r'^register/$', RegisterView.as_view(), name="register"),
     re_path(r'^captcha/', include('captcha.urls')),
     re_path(r'^active/(?P<active_code>.*)/$',ActiveUserView.as_view(), name="user_active"),

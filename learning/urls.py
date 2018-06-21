@@ -25,9 +25,12 @@ from django.views.generic import TemplateView
 
 urlpatterns = [
     path( r'xadmin/', xadmin.site.urls),
-   # path( r'', include('apps.message.urls')),
-    re_path(r'^index/', TemplateView.as_view(template_name="index.html"), name="index"),
+    #path( r'', include('apps.message.urls')),
+    #re_path(r'^index/', TemplateView.as_view(template_name="index.html"), name="index"),
+    path(r'', include('apps.mixapp.urls')),
     path(r'', include('apps.users.urls')),
     path(r'', include('apps.organization.urls')),
     path(r'', include('apps.courses.urls'))
 ]
+
+

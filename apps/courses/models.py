@@ -13,6 +13,7 @@ class Course(models.Model):
     course_organization = models.ForeignKey(CourseOrg, on_delete=models.CASCADE, verbose_name=u"课程机构", null=True, blank=True)
     course_teacher = models.ForeignKey(Teacher,on_delete=models.CASCADE,verbose_name=u"课程教师", null=True, blank=True )
     name = models.CharField(max_length=50, verbose_name=u"课程名")
+    is_banner = models.BooleanField(default=False, verbose_name=u"是否为轮播")
     desc = models.CharField(max_length=300, verbose_name=u"课程描述")
     detail = models.TextField(verbose_name=u"课程详情")
     degree = models.CharField(choices=(("cj",u"初级"),("zj",u"中级"),("gj",u"高级")), max_length=2)

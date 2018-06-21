@@ -180,6 +180,8 @@ class TeacherDetailView(View):
                 has_hav_teacher = True
             if UserFavorite.objects.filter(fav_type=2, fav_id=teacher_detail.org_id):
                 has_fav_organization = True
+        teacher_detail.click_nums += 1
+        teacher_detail.save()
 
         return render(request, 'teacher-detail.html', {
             "teacher_detail":teacher_detail,

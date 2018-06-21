@@ -26,7 +26,7 @@ sys.path.insert(0,os.path.join(BASE_DIR,'extra_apps'))
 SECRET_KEY = 'dv=r--f_lf)(8ll2&%p7!cef5h7ke%krl%!9mix0&*(+iuh1xv'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['localhost ','47.94.236.221']
 
@@ -152,7 +152,7 @@ STATIC_URL = '/static/'
 #STATICFILES_DIRS = [
 #	os.path.join(BASE_DIR,'static')
 #]
-#STATIC_ROOT = os.path.join(BASE_DIR,'static')
+STATIC_ROOT = os.path.join(BASE_DIR,'static')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
