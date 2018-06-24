@@ -10,14 +10,14 @@
 <div class="right companycenter layout grouping" >
     <div class="head">
 	<h1>全部课程</h1>
-	<a class="green fr more" href="org-detail-course.html">查看更多  >  </a>
+	<a class="green fr more" href="{% url 'org_course_list' organization.id  %}">查看更多  >  </a>
     </div>
     <div class="brief group_list">
         {% for course in all_courses %}
         <div class="module1_5 box">
-	<a href="/course_list/{{ course.course_organization.id }}"><img width="214" src="{{ MEDIA_URL }}{{ course.image }} "/></a>
+	<a href="{% url 'course_detail' course.id  %}"><img width="214" src="{{ MEDIA_URL }}{{ course.image }} "/></a>
             <div class="des">
-	        <a href="/course_list/{{ course.course_organization.id }}"><h2>{{ course.name }}</h2></a>
+	        <a href="{% url 'course_detail' course.id  %}"><h2>{{ course.name }}</h2></a>
 	        <span class="fl">课时：<i class="key">{{ course.learn_time }}</i></span>
 	        <span class="fr">参加人数：{{ course.students }}</span>
             </div>
@@ -34,23 +34,23 @@
 {% block organization_teacher %}
 <div class="right companycenter layout" >
     <div class="head">
-        <a class="green fr more" href="org-detail-teachers.html">查看更多  >  </a>
+        <a class="green fr more" href="{% url 'org_teacher_list' organization.id  %}">查看更多  >  </a>
     </div>
     {% for teacher in all_teachers %}
     <div class="diarys">
         <div class="module5 share company-diary-box" style="padding:10px 0;">
 	    <div class="left">
-	        <img class="pic" src="{{ MEDIA_URL }}{{ teacher.image}}"/>
+                <a href="{% url 'teacher_detail' teacher.id  %}"><img class="pic" src="{{ MEDIA_URL }}{{ teacher.image}}"/></a>
                 <p>昵称：{{ teacher.name }}</p>
 	    </div>
 	    <div class="right">
 	        <div class="top">
 		    <div class="fl">
-		        <a href=""><h1>{{ teacher.points }}</h1></a>
+		        <a href="{% url 'teacher_detail' teacher.id  %}"><h1>{{ teacher.name }}</h1></a>
 		        <span>发表于：{{ teacher.add_time }}</span>
 		    </div>
 		</div>
-		<div class="middle" style="border-bottom:0;">课程介绍</div>
+		<div class="middle" style="border-bottom:0;">课程介绍:{{ teacher.points }}</div>
 	    </div>
 	</div>
     </div>
@@ -62,9 +62,9 @@
 <div class="right companycenter layout" >
 	<div class="head">
 		<h1>机构介绍</h1>
-		<a class="green fr more" href="org-detail-desc.html">查看更多  >  </a>
+		<a class="green fr more" href="{% url 'org_descript' organization.id  %}">查看更多  >  </a>
 	</div>
-	<div class="cont">&nbsp; &nbsp; {{ organization.desc }}<a href="/company/desc/22/"><span class="green">[查看更多]</span></a></div>
+	<div class="cont">&nbsp; &nbsp; {{ organization.desc|slice:'0:50' }}<a href="{% url 'org_descript' organization.id  %}"><span class="green">[查看更多]</span></a></div>
 </div>
 {%  endblock %}
 

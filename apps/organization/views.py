@@ -7,7 +7,6 @@ from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 from pure_pagination.mixins import PaginationMixin
 
 from organization.models import CourseOrg, CityDict, Teacher
-from organization.forms import UserAskForm
 from operation.models import UserFavorite
 from courses.models import Course
 # Create your views here.
@@ -54,48 +53,12 @@ class OrganizationView(View):
         })
 
 
-class AddUserAskView(View):
-    def post(self,request):
-        userask_form = UserAskForm(request.POST)
-        if userask_form.is_valid():
-            user_ask = userask_form.save(commit=True)
-        #   return HttpResponse("{'status':'scucess'}", content_type='application/json')
-            return JsonResponse({'status':'success'})
-        else:
-            return  JsonResponse({'status':'fail', 'msg':userask_form.errors })
-        #   return HttpResponse("{'status':'fail','msg':'添加出错'}", content_type='application/json')
-
-
-class AddFavoriteView(View):
-    def post(self,request):
-        fav_id = request.POST.get('fav_id', '')
-        fav_type = request.POST.get('fav_type', '')
-
-        if not request.user.is_authenticated:
-            return  JsonResponse({'status':'fail', 'msg':'用户未登录'})
-
-        exist_records = UserFavorite.objects.filter(user=request.user, fav_id=int(fav_id), fav_type=int(fav_type))
-        if exist_records:
-            exist_records.delete()
-            return  JsonResponse({'status':'success', 'msg':'收藏'})
-        else:
-            user_fav = UserFavorite()
-            if int(fav_id) > 0 and int(fav_type) > 0:
-                user_fav.fav_id = int(fav_id)
-                user_fav.fav_type = int(fav_type)
-                user_fav.user = request.user
-                user_fav.save();
-                #   return HttpResponse("{'status':'scucess'}", content_type='application/json')
-                return JsonResponse({'status':'success', 'msg':'已收藏'})
-            else:
-                return  JsonResponse({'status':'fail', 'msg':'收藏失败'})
-
-
-
-
 class OrganizationHomeView(View):
     def get(self, request, organization_id):
-        current_page = 'home'
+        is_favorite = False
+        if request.user.is_authenticated:
+            if UserFavorite.objects.filter(fav_type=2, fav_id=int(organization_id), user=request.user):
+                is_favorite = True
         course_organization = CourseOrg.objects.get(id=int(organization_id))
         all_courses = course_organization.course_set.all()[:3]#外键
         all_teachers = course_organization.teacher_set.all()[:3]
@@ -103,41 +66,50 @@ class OrganizationHomeView(View):
             'organization':course_organization,
             'all_courses':all_courses,
             'all_teachers':all_teachers,
-            'current_page':current_page
+            'is_favorite':is_favorite
         })
 
 
 class OrganizationCourseListView(View):
     def get(self, request, organization_id):
-        current_page = 'course_list'
+        is_favorite = False
+        if request.user.is_authenticated:
+            if UserFavorite.objects.filter(fav_type=2, fav_id=int(organization_id), user=request.user):
+                is_favorite = True
         course_organization = CourseOrg.objects.get(id=int(organization_id))
         all_courses = course_organization.course_set.all()#外键
         return render(request, 'org-course-list.html',{
             'organization':course_organization,
             'all_courses':all_courses,
-            'current_page':current_page
+            'is_favorite':is_favorite
         })
 
 
 class OrganizationTeacherListView(View):
     def get(self, request, organization_id):
-        current_page = 'teacher_list'
+        is_favorite = False
+        if request.user.is_authenticated:
+            if UserFavorite.objects.filter(fav_type=2, fav_id=int(organization_id), user=request.user):
+                is_favorite = True
         course_organization = CourseOrg.objects.get(id=int(organization_id))
         all_teachers = course_organization.teacher_set.all()#外键
         return render(request, 'org-teacher-list.html',{
             'organization':course_organization,
             'all_teachers':all_teachers,
-            'current_page':current_page
+            'is_favorite':is_favorite
         })
 
 
 class OrganizationDescriptView(View):
     def get(self, request, organization_id):
-        current_page = 'descript'
+        is_favorite = False
+        if request.user.is_authenticated:
+            if UserFavorite.objects.filter(fav_type=2, fav_id=int(organization_id), user=request.user):
+                is_favorite = True
         course_organization = CourseOrg.objects.get(id=int(organization_id))
         return render(request, 'org-descript.html',{
             'organization':course_organization,
-            'current_page':current_page
+            'is_favorite':is_favorite
         })
 
 

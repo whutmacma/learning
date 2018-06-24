@@ -60,8 +60,8 @@
             </div>
             <div class="middle">
                 <div class="wp">
-                    <a href="index.html"><img class="fl" src='{% static "images/logo2.png" %}'/></a>
-                    <h1>我的慕学网</h1>
+                    <a href="/index"><img class="fl" src='{% static "images/logo2.png" %}'/></a>
+                    <h1>我的网站</h1>
                 </div>
             </div>
         </div>
@@ -73,7 +73,7 @@
         <div class="wp">
             <ul  class="crumbs">
                 <li><a href="/index">首页</a>></li>
-                <li><a href="/user/home/">个人中心</a>></li>
+		<li><a href="{% url 'usercenter' %}">个人中心</a>></li>
                 <li>个人信息</li>
             </ul>
         </div>

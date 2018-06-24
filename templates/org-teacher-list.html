@@ -10,19 +10,19 @@
 {% block organization_teacher %}
 <div class="right companycenter layout" >
     <div class="head">
-        <a class="green fr more" href="org-detail-teachers.html">查看更多  >  </a>
+        <h1>全部老师</h1>
     </div>
     {% for teacher in all_teachers %}
     <div class="diarys">
         <div class="module5 share company-diary-box" style="padding:10px 0;">
 	    <div class="left">
-	        <img class="pic" src="{{ MEDIA_URL }}{{ teacher.image}}"/>
+		    <a href="{% url 'teacher_detail' teacher.id %}"><img class="pic" src="{{ MEDIA_URL }}{{ teacher.image}}"/></a>
                 <p>昵称：{{ teacher.name }}</p>
 	    </div>
 	    <div class="right">
 	        <div class="top">
 		    <div class="fl">
-		        <a href=""><h1>{{ teacher.points }}</h1></a>
+                        <a href="{% url 'teacher_detail' teacher.id %}"><h1>{{ teacher.name }}</h1></a>
 		        <span>发表于：{{ teacher.add_time }}</span>
 		    </div>
 		</div>

@@ -66,7 +66,14 @@
 				<span class="key">5.0</span>
 				</p>
 			</div>
-                    <div class="btn fr collectionbtn  notlogin"data-favid="22" data-fav-type="1"> 收藏 </div>
+                    <div class="btn fr collectionbtn  notlogin"data-favid="22" data-fav-type="1">
+                    {% if is_favorite %} 
+                     已收藏
+		    {% else %}
+		     收藏
+		    {% endif %}
+
+                    </div>
                 </div>
              </div>
 	</div>
@@ -79,7 +86,7 @@
     <div class="wp">
         <ul  class="crumbs">
             <li><a href="/index">首页</a>></li>
-	    <li><a href="/org_list">课程机构</a>></li>
+	    <li><a href="{% url 'org_list' %}">课程机构</a>></li>
 	    
 	    {% block  organization_bar %}
 	    <li>机构首页</li>
@@ -92,10 +99,10 @@
     <div class="wp list personal_list comp">
         <div class="left">
 	    <ul>
-		<li class="{% ifequal current_page 'home' %}active2{% endifequal %}"><a href="{% url 'org_home' organization.id %}">机构首页</a></li>
-		<li class="{% ifequal current_page 'course_list' %}active2{% endifequal %}"><a href="{% url 'org_course_list' organization.id %}">机构课程</a></li>
-		<li class="{% ifequal current_page 'teacher_list' %}active2{% endifequal %}"><a href="{% url 'org_teacher_list' organization.id %}">机构讲师</a></li>
-		<li class="{% ifequal current_page 'descript' %}active2{% endifequal %}"><a href="{% url 'org_descript' organization.id %}">机构介绍</a></li>
+		    <li class="{% ifequal request.path|slice:'-7:-3' 'home' %}active2{% endifequal %}"><a href="{% url 'org_home' organization.id %}">机构首页</a></li>
+		<li class="{% ifequal request.path|slice:'-14:-3' 'course_list' %}active2{% endifequal %}"><a href="{% url 'org_course_list' organization.id %}">机构课程</a></li>
+		<li class="{% ifequal request.path|slice:'-15:-3' 'teacher_list' %}active2{% endifequal %}"><a href="{% url 'org_teacher_list' organization.id %}">机构讲师</a></li>
+		<li class="{% ifequal request.path|slice:'-11:-3' 'descript' %}active2{% endifequal %}"><a href="{% url 'org_descript' organization.id %}">机构介绍</a></li>
 	    </ul>
 	</div>
 
