@@ -50,6 +50,8 @@ INSTALLED_APPS = [
     'captcha',
     'pure_pagination',
 
+    'django_celery_results',
+
     #'message',
     'users',
     'courses',
@@ -165,3 +167,23 @@ EMAIL_HOST_PASSWORD = "tdl2018"
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
 EMAIL_FROM = "whutmachangcong@163.com"
+
+#djcelery.setup_loader()
+#BROKER_URL = 'redis://localhost:6379'
+#CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+#CELERY_ACCEPT_CONTENT = ['application/json']
+#CELERY_TASK_SERIALIZER = 'json'
+#CELERY_RESULT_SERIRALIZER = 'json'
+#CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatebaseScheduler'
+#CELERY_TIMEZONE = 'Asia/Shanghai'
+
+
+
+
+
+
+
+
+
+
+
